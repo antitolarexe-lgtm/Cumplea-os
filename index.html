@@ -1,1 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Antonella's 15</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burgundy:#5c1a25;
+    --burgundy-deep:#3d0f17;
+    --gold:#c9a15a;
+    --gold-soft:#e3caa0;
+    --beige:#f3e9d8;
+    --ivory:#faf5ec;
+    --ink:#2a1013;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;margin:0;}
+  body{
+    background:radial-gradient(ellipse at top, var(--burgundy) 0%, var(--burgundy-deep) 70%);
+    font-family:'Jost',sans-serif;
+    color:var(--beige);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow-x:hidden;
+    min-height:100%;
+  }
+
+  .stage{
+    width:100%;
+    max-width:480px;
+    padding:24px;
+    position:relative;
+  }
+
+  /* ---------- Envelope (gate) ---------- */
+  #gate{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:22px;
+    cursor:pointer;
+    padding:40px 20px;
+    transition:opacity .6s ease;
+  }
+  #gate p{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:1.05rem;
+    letter-spacing:.02em;
+    color:var(--gold-soft);
+    margin:0;
+    max-width:280px;
+  }
+  #gate .tap-hint{
+    font-size:.68rem;
+    letter-spacing:.1em;
+    color:rgba(230,210,180,.55);
+  }
+  #gate .rule{
+    width:36px;height:1px;background:var(--gold);
+  }
+
+  /* ---------- Invitation card ---------- */
+  #card{
+    display:none;
+    text-align:center;
+    background:linear-gradient(180deg, rgba(250,245,236,.03), rgba(250,245,236,0));
+    border:1px solid rgba(201,161,90,.35);
+    padding:46px 30px 38px;
+    position:relative;
+  }
+  #card::before,
+  #card::after{
+    content:"";
+    position:absolute;
+    left:14px;right:14px;
+    height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  #card::before{top:12px;}
+  #card::after{bottom:12px;}
+
+  #card.show > *{
+    opacity:0;
+    transform:translateY(10px);
+    animation:reveal .7s ease forwards;
+  }
+  #card.show h1{animation-delay:.1s;}
+  #card.show .sub{animation-delay:.55s;}
+  #card.show .divider{animation-delay:.75s;}
+  #card.show .details{animation-delay:.9s;}
+  #card.show .details .detail-row{
+    opacity:0;
+    transform:translateY(10px);
+    animation:reveal .6s ease forwards;
+  }
+  #card.show .details .detail-row:nth-child(1){animation-delay:1.0s;}
+  #card.show .details .detail-row:nth-child(2){animation-delay:1.15s;}
+  #card.show .details .detail-row:nth-child(3){animation-delay:1.3s;}
+  #card.show .rsvp{animation-delay:1.5s;}
+  #card.show .sound-note{animation-delay:1.65s;}
+
+  @keyframes reveal{
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  h1{
+    margin:0 0 4px;
+    line-height:1;
+    font-family:'Pinyon Script',cursive;
+    font-weight:400;
+    font-size:clamp(4.4rem,20vw,6.6rem);
+    color:var(--ivory);
+    text-align:center;
+  }
+
+  .sub{
+    font-size:.86rem;
+    letter-spacing:.06em;
+    color:var(--gold-soft);
+    margin:0 0 30px;
+  }
+
+  .divider{
+    width:36px;height:1px;background:var(--gold);
+    margin:0 auto 30px;
+  }
+
+  .details{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    margin-bottom:34px;
+  }
+  .detail-row{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+  }
+  .detail-row .label{
+    font-size:.66rem;
+    letter-spacing:.16em;
+    color:var(--gold);
+  }
+  .detail-row .value{
+    font-family:'Playfair Display',serif;
+    font-style:italic;
+    font-size:1.15rem;
+    color:var(--ivory);
+    font-weight:500;
+    line-height:1.35;
+  }
+
+  .rsvp{
+    font-size:.72rem;
+    letter-spacing:.05em;
+    color:rgba(230,210,180,.7);
+    line-height:1.6;
+  }
+
+  #gate:focus-visible{outline:2px solid var(--gold); outline-offset:6px;}
+
+  @media (prefers-reduced-motion: reduce){
+    #card{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <div id="gate" role="button" tabindex="0" aria-label="Abrir invitación">
+    <div class="rule"></div>
+    <p>Tienes una invitación de Antonella&hellip;</p>
+    <span class="tap-hint">toca para abrir</span>
+  </div>
+
+  <div id="card">
+    <h1>Antonella's 15</h1>
+    <p class="sub">Te invito a celebrar conmigo</p>
+    <div class="divider"></div>
+
+    <div class="details">
+      <div class="detail-row">
+        <span class="label">FECHA</span>
+        <span class="value">Viernes 2 de octubre</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">HORA</span>
+        <span class="value">18:00 hrs</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">LUGAR</span>
+        <span class="value">Valle Lo Castillo<br>Cascada Los Peumos 1002</span>
+      </div>
+    </div>
+
+    <p class="rsvp">Será un honor celebrar contigo esta noche</p>
+  </div>
+
+</div>
+
+<audio id="bgAudio" loop preload="none">
+  <!-- Reemplaza esta línea con tu propio archivo de audio (mp3) -->
+  <source src="tu-cancion.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  const gate = document.getElementById('gate');
+  const card = document.getElementById('card');
+  const audio = document.getElementById('bgAudio');
+
+  function openInvite(){
+    gate.style.opacity = '0';
+    setTimeout(() => { gate.style.display = 'none'; }, 550);
+    card.style.display = 'block';
+    requestAnimationFrame(() => card.classList.add('show'));
+    audio.play().catch(() => {});
+  }
+
+  gate.addEventListener('click', openInvite);
+  gate.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openInvite(); }
+  });
+</script>
+
+</body>
+</html>
 
